@@ -15,6 +15,10 @@
         if (localStorage.getItem('karavan-theme') === 'dark') {
           document.documentElement.setAttribute('data-theme', 'dark');
         }
+        var lang = localStorage.getItem('karavan-lang');
+        if (lang === 'en' || lang === 'es' || lang === 'ru') {
+          document.documentElement.lang = lang;
+        }
       } catch (e) {}
     })();
   </script>
@@ -373,6 +377,45 @@ body {
 .side-nav-item.is-active .side-nav-icon {
   background: rgba(255, 255, 255, 0.14);
   color: #dbeafe;
+}
+
+
+.side-nav-lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--nav-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--nav-text);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.side-nav-lang-toggle:hover {
+  background: var(--nav-item-hover);
+  color: #fff;
+}
+.side-nav-lang-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: var(--nav-icon-bg);
+  color: var(--nav-icon-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.side-nav.collapsed .side-nav-lang-label {
+  display: none;
 }
 
 .side-nav-theme-toggle {
@@ -3557,6 +3600,11 @@ footer {
         </span>
         <span class="side-nav-theme-label">Тёмная тема</span>
       </button>
+      <button type="button" class="side-nav-lang-toggle" id="lang-toggle" title="Язык: Русский">
+        <span class="side-nav-lang-code" aria-hidden="true">RU</span>
+        <span class="side-nav-lang-label">RU · Русский</span>
+      </button>
+
       <button type="button" class="side-nav-toggle" id="side-nav-toggle" aria-expanded="true" aria-controls="side-nav" title="Свернуть меню">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
@@ -5841,6 +5889,446 @@ footer {
     renderBottomNav();
   }
 
+
+  // --- i18n RU / EN / ES ---
+  const LANG_STORAGE_KEY = "karavan-lang";
+  const LANGS = ["ru", "en", "es"];
+  const LANG_LABELS = { ru: "RU", en: "EN", es: "ES" };
+  const LANG_NAMES = { ru: "Русский", en: "English", es: "Español" };
+
+  const I18N = {
+    ru: {
+      brandTitle: "Караван",
+      brandSubtitle: "альянса",
+      themeDark: "Тёмная тема",
+      themeLight: "Светлая тема",
+      randomDaySub: "без пассажиров",
+      langTitle: "Язык: Русский",
+      collapseNav: "Свернуть меню",
+      expandNav: "Развернуть меню",
+      h1: "Караван альянса",
+      headerSub: "Загрузка списка игроков, автоматическое распределение по вагонам, проверка правил и готовые объявления для чата.",
+      workflowAria: "Порядок работы",
+      wf1: "Загрузите файл",
+      wf2: "Режим каравана",
+      wf3: "Объявления",
+      toastTitle: "Караван готов!",
+      toastText: "Все правила выполнены — можно копировать объявления для чата.",
+      toastGoto: "К объявлениям",
+      helpSummary: "Инструкция и требования к файлу",
+      uploadTitle: "Загрузка файла",
+      uploadAnother: "Загрузить другой файл",
+      dropTitle: "Перетащите файл сюда или нажмите для выбора",
+      dropTitleMobile: "Нажмите, чтобы выбрать файл",
+      dropHint: "Форматы: .csv, .xlsx, .xlsm",
+      dropHintMobile: "CSV, XLSX, XLSM · из приложения «Файлы»",
+      pickFile: "Выбрать файл",
+      loadSample: "Загрузить тестовые данные из примера",
+      sampleHint: "игроков",
+      statusDefault: "Выберите файл со списком игроков (.xlsx, .xlsm или .csv).",
+      caravanTitle: "Составление каравана",
+      formationTitle: "Режим формирования каравана",
+      formationDesc: "Как учитывать ранг взносов при расчёте приоритета списка перед распределением мест.",
+      formationNow: "Сейчас:",
+      contribOn: "Взносы +10%",
+      contribOff: "Только битва",
+      btn7Strong: "Караван 7 дней",
+      btn7Small: "Пн–Вс · 140 мест",
+      btn6Strong: "ДЕНЬ РАНДОМА",
+      btn6Small: "без пассажиров в выбранный день",
+      rebuild: "Пересобрать караван",
+      randomDayLabel: "День рандома (без пассажиров):",
+      hint7: "7 дней",
+      hint7Text: " — пассажиры Пн–Вс (20/день, 140 мест).",
+      hint6: "ДЕНЬ РАНДОМА",
+      hint6Text: " — пассажиры 6 дней; в выбранный день только водитель и VIP (120 мест).",
+      emptyTitle: "Караван ещё не собран",
+      emptyDesc: "Нажмите «Караван 7 дней» или «ДЕНЬ РАНДОМА» — здесь появятся расписание и проверка правил.",
+      annTitle: "Объявления для чата",
+      playersTitle: "Список игроков",
+      addPlayer: "+ Добавить игрока",
+      addPlayerHint: "Для вступивших в альянс среди недели",
+      reorderHint: "На телефоне: удерживайте ⋮ у строки и перетащите для смены порядка.",
+      thRank: "Рейтинг",
+      thNick: "Ник",
+      thLevel: "Уровень",
+      thDuel: "Ранг Битва Альянсов",
+      thContrib: "Ранг Взносы",
+      thPriority: "Приоритет",
+      thGroup: "Группа",
+      day1: "Понедельник", day2: "Вторник", day3: "Среда", day4: "Четверг",
+      day5: "Пятница", day6: "Суббота", day7: "Воскресенье",
+      act1: "Сбор ресурсов", act2: "Строительство зданий", act3: "Исследование технологий",
+      act4: "Улучшение героев", act5: "Обучение солдат", act6: "Война королевств", act7: "Выходной",
+      groupDRIVER: "Водитель", groupVIP: "VIP", groupMIDDLE: "Средняя", groupLAST30: "Последние 30",
+      mode7badge: "Караван 7 дней",
+      mode7desc: "Пассажиры Пн–Вс · 4×5 = 20 мест в день · 140 мест за неделю",
+      mode6badge: "ДЕНЬ РАНДОМА",
+      mode6desc: "Пассажиры 6 дней · выбранный день: только водитель и VIP · 120 мест за неделю",
+      navHelp: "Инструкция", navUpload: "Загрузка файла", navCaravan: "Составление каравана",
+      navPlayers: "Список игроков", navAnn: "Объявления для чата",
+      navSchedule: "Расписание", navOverview: "Водители и VIP", navDays: "Детали по дням",
+      navValidation: "Проверка правил", navStats: "Статистика",
+      bottomFile: "Файл", bottomCaravan: "Караван", bottomChat: "Чат", bottomPlayers: "Игроки",
+      bottomPlan: "План", bottomMenu: "Меню",
+      success: "УСПЕХ", error: "ОШИБКА",
+      navAria: "Навигация по разделам",
+      ready: "Готово. Выберите или перетащите файл со списком игроков.",
+      noPassengersNote: "В этот день только водитель и VIP (день рандома)",
+      helpHtml: null
+    },
+    en: {
+      brandTitle: "Caravan",
+      brandSubtitle: "alliance",
+      themeDark: "Dark theme",
+      themeLight: "Light theme",
+      randomDaySub: "no passengers",
+      langTitle: "Language: English",
+      collapseNav: "Collapse menu",
+      expandNav: "Expand menu",
+      h1: "Alliance Caravan",
+      headerSub: "Load a player list, auto-assign wagon seats, check rules, and get chat announcements.",
+      workflowAria: "Workflow",
+      wf1: "Upload file",
+      wf2: "Caravan mode",
+      wf3: "Announcements",
+      toastTitle: "Caravan ready!",
+      toastText: "All rules passed — you can copy chat announcements.",
+      toastGoto: "Go to announcements",
+      helpSummary: "Instructions and file requirements",
+      uploadTitle: "File upload",
+      uploadAnother: "Upload another file",
+      dropTitle: "Drop a file here or click to choose",
+      dropTitleMobile: "Tap to choose a file",
+      dropHint: "Formats: .csv, .xlsx, .xlsm",
+      dropHintMobile: "CSV, XLSX, XLSM · from Files app",
+      pickFile: "Choose file",
+      loadSample: "Load sample test data",
+      sampleHint: "players",
+      statusDefault: "Choose a player list file (.xlsx, .xlsm or .csv).",
+      caravanTitle: "Build caravan",
+      formationTitle: "Caravan formation mode",
+      formationDesc: "How contribution rank affects list priority before seat assignment.",
+      formationNow: "Current:",
+      contribOn: "Contrib +10%",
+      contribOff: "Battle only",
+      btn7Strong: "7-day caravan",
+      btn7Small: "Mon–Sun · 140 seats",
+      btn6Strong: "RANDOM DAY",
+      btn6Small: "no passengers on selected day",
+      rebuild: "Rebuild caravan",
+      randomDayLabel: "Random day (no passengers):",
+      hint7: "7 days",
+      hint7Text: " — passengers Mon–Sun (20/day, 140 seats).",
+      hint6: "RANDOM DAY",
+      hint6Text: " — passengers 6 days; on selected day driver & VIP only (120 seats).",
+      emptyTitle: "Caravan not built yet",
+      emptyDesc: "Press “7-day caravan” or “RANDOM DAY” — schedule and rule checks will appear here.",
+      annTitle: "Chat announcements",
+      playersTitle: "Player list",
+      addPlayer: "+ Add player",
+      addPlayerHint: "For members who joined mid-week",
+      reorderHint: "On phone: hold ⋮ on a row and drag to reorder.",
+      thRank: "Rank",
+      thNick: "Nick",
+      thLevel: "Level",
+      thDuel: "Alliance Battle rank",
+      thContrib: "Contribution rank",
+      thPriority: "Priority",
+      thGroup: "Group",
+      day1: "Monday", day2: "Tuesday", day3: "Wednesday", day4: "Thursday",
+      day5: "Friday", day6: "Saturday", day7: "Sunday",
+      act1: "Resource gathering", act2: "Building construction", act3: "Tech research",
+      act4: "Hero upgrades", act5: "Troop training", act6: "Kingdom war", act7: "Day off",
+      groupDRIVER: "Driver", groupVIP: "VIP", groupMIDDLE: "Middle", groupLAST30: "Last 30",
+      mode7badge: "7-day caravan",
+      mode7desc: "Passengers Mon–Sun · 4×5 = 20 seats/day · 140 seats/week",
+      mode6badge: "RANDOM DAY",
+      mode6desc: "Passengers 6 days · selected day: driver & VIP only · 120 seats/week",
+      navHelp: "Help", navUpload: "File upload", navCaravan: "Build caravan",
+      navPlayers: "Player list", navAnn: "Chat announcements",
+      navSchedule: "Schedule", navOverview: "Drivers & VIP", navDays: "Day details",
+      navValidation: "Rule check", navStats: "Statistics",
+      bottomFile: "File", bottomCaravan: "Caravan", bottomChat: "Chat", bottomPlayers: "Players",
+      bottomPlan: "Plan", bottomMenu: "Menu",
+      success: "OK", error: "ERROR",
+      navAria: "Section navigation",
+      ready: "Ready. Choose or drop a player list file.",
+      noPassengersNote: "Driver and VIP only on this day (random day)",
+      helpHtml: null
+    },
+    es: {
+      brandTitle: "Caravana",
+      brandSubtitle: "alianza",
+      themeDark: "Tema oscuro",
+      themeLight: "Tema claro",
+      randomDaySub: "sin pasajeros",
+      langTitle: "Idioma: Español",
+      collapseNav: "Contraer menú",
+      expandNav: "Expandir menú",
+      h1: "Caravana de la alianza",
+      headerSub: "Carga la lista de jugadores, asigna asientos, comprueba reglas y genera anuncios para el chat.",
+      workflowAria: "Flujo de trabajo",
+      wf1: "Cargar archivo",
+      wf2: "Modo caravana",
+      wf3: "Anuncios",
+      toastTitle: "¡Caravana lista!",
+      toastText: "Todas las reglas cumplidas — puedes copiar los anuncios del chat.",
+      toastGoto: "Ir a anuncios",
+      helpSummary: "Instrucciones y requisitos del archivo",
+      uploadTitle: "Carga de archivo",
+      uploadAnother: "Cargar otro archivo",
+      dropTitle: "Suelta el archivo aquí o haz clic para elegir",
+      dropTitleMobile: "Toca para elegir un archivo",
+      dropHint: "Formatos: .csv, .xlsx, .xlsm",
+      dropHintMobile: "CSV, XLSX, XLSM · desde Archivos",
+      pickFile: "Elegir archivo",
+      loadSample: "Cargar datos de ejemplo",
+      sampleHint: "jugadores",
+      statusDefault: "Elige un archivo con la lista de jugadores (.xlsx, .xlsm o .csv).",
+      caravanTitle: "Armar caravana",
+      formationTitle: "Modo de formación",
+      formationDesc: "Cómo influye el rango de aportes en la prioridad de la lista.",
+      formationNow: "Ahora:",
+      contribOn: "Aportes +10%",
+      contribOff: "Solo batalla",
+      btn7Strong: "Caravana 7 días",
+      btn7Small: "Lun–Dom · 140 asientos",
+      btn6Strong: "DÍA ALEATORIO",
+      btn6Small: "sin pasajeros el día elegido",
+      rebuild: "Rearmar caravana",
+      randomDayLabel: "Día aleatorio (sin pasajeros):",
+      hint7: "7 días",
+      hint7Text: " — pasajeros Lun–Dom (20/día, 140 asientos).",
+      hint6: "DÍA ALEATORIO",
+      hint6Text: " — pasajeros 6 días; el día elegido solo conductor y VIP (120 asientos).",
+      emptyTitle: "La caravana aún no está armada",
+      emptyDesc: "Pulsa «Caravana 7 días» o «DÍA ALEATORIO» — aquí aparecerán el horario y las reglas.",
+      annTitle: "Anuncios para el chat",
+      playersTitle: "Lista de jugadores",
+      addPlayer: "+ Añadir jugador",
+      addPlayerHint: "Para quien entró a mitad de semana",
+      reorderHint: "En el móvil: mantén ⋮ en la fila y arrastra para reordenar.",
+      thRank: "Rango",
+      thNick: "Nick",
+      thLevel: "Nivel",
+      thDuel: "Rango Batalla de Alianza",
+      thContrib: "Rango Aportes",
+      thPriority: "Prioridad",
+      thGroup: "Grupo",
+      day1: "Lunes", day2: "Martes", day3: "Miércoles", day4: "Jueves",
+      day5: "Viernes", day6: "Sábado", day7: "Domingo",
+      act1: "Recolección de recursos", act2: "Construcción", act3: "Investigación",
+      act4: "Mejora de héroes", act5: "Entrenamiento", act6: "Guerra de reinos", act7: "Descanso",
+      groupDRIVER: "Conductor", groupVIP: "VIP", groupMIDDLE: "Media", groupLAST30: "Últimos 30",
+      mode7badge: "Caravana 7 días",
+      mode7desc: "Pasajeros Lun–Dom · 4×5 = 20 asientos/día · 140 asientos/semana",
+      mode6badge: "DÍA ALEATORIO",
+      mode6desc: "Pasajeros 6 días · día elegido: solo conductor y VIP · 120 asientos/semana",
+      navHelp: "Ayuda", navUpload: "Carga de archivo", navCaravan: "Armar caravana",
+      navPlayers: "Lista de jugadores", navAnn: "Anuncios del chat",
+      navSchedule: "Horario", navOverview: "Conductores y VIP", navDays: "Detalle por días",
+      navValidation: "Comprobar reglas", navStats: "Estadísticas",
+      bottomFile: "Archivo", bottomCaravan: "Caravana", bottomChat: "Chat", bottomPlayers: "Jugadores",
+      bottomPlan: "Plan", bottomMenu: "Menú",
+      success: "ÉXITO", error: "ERROR",
+      navAria: "Navegación por secciones",
+      ready: "Listo. Elige o suelta un archivo con la lista de jugadores.",
+      noPassengersNote: "Solo conductor y VIP este día (día aleatorio)",
+      helpHtml: null
+    }
+  };
+
+  let currentLang = "ru";
+
+  function t(key) {
+    return (I18N[currentLang] && I18N[currentLang][key]) || (I18N.ru && I18N.ru[key]) || key;
+  }
+
+  function getSavedLang() {
+    try {
+      const saved = localStorage.getItem(LANG_STORAGE_KEY);
+      if (LANGS.includes(saved)) return saved;
+    } catch (_) {}
+    return "ru";
+  }
+
+  function applyDictToRuntime() {
+    DAY_NAMES[1] = t("day1"); DAY_NAMES[2] = t("day2"); DAY_NAMES[3] = t("day3");
+    DAY_NAMES[4] = t("day4"); DAY_NAMES[5] = t("day5"); DAY_NAMES[6] = t("day6"); DAY_NAMES[7] = t("day7");
+    DAY_ACTIVITY[1].label = t("act1"); DAY_ACTIVITY[2].label = t("act2"); DAY_ACTIVITY[3].label = t("act3");
+    DAY_ACTIVITY[4].label = t("act4"); DAY_ACTIVITY[5].label = t("act5"); DAY_ACTIVITY[6].label = t("act6"); DAY_ACTIVITY[7].label = t("act7");
+    GROUP_LABELS.DRIVER = t("groupDRIVER"); GROUP_LABELS.VIP = t("groupVIP");
+    GROUP_LABELS.MIDDLE = t("groupMIDDLE"); GROUP_LABELS.LAST30 = t("groupLAST30");
+    if (typeof MODE_LABELS !== "undefined") {
+      MODE_LABELS["7days"].badge = t("mode7badge");
+      MODE_LABELS["7days"].desc = t("mode7desc");
+      MODE_LABELS["6days"].badge = t("mode6badge");
+      MODE_LABELS["6days"].desc = t("mode6desc");
+    }
+    BOTTOM_NAV_BASE[0].label = t("bottomFile");
+    BOTTOM_NAV_BASE[1].label = t("bottomCaravan");
+    BOTTOM_NAV_BASE[2].label = t("bottomChat");
+    BOTTOM_NAV_BASE[3].label = t("bottomPlayers");
+    BOTTOM_NAV_CARAVAN[0].label = t("bottomPlan");
+    BOTTOM_NAV_MENU.label = t("bottomMenu");
+    NAV_MAIN[0].label = t("navHelp");
+    NAV_MAIN[1].label = t("navUpload");
+    NAV_MAIN[2].label = t("navCaravan");
+    NAV_MAIN[3].label = t("navPlayers");
+    NAV_ANNOUNCEMENTS.label = t("navAnn");
+    NAV_CARAVAN[0].label = t("navSchedule");
+    NAV_CARAVAN[1].label = t("navOverview");
+    NAV_CARAVAN[2].label = t("navDays");
+    NAV_CARAVAN[3].label = t("navValidation");
+    NAV_CARAVAN[4].label = t("navStats");
+  }
+
+  function setText(sel, text, attr) {
+    const el = typeof sel === "string" ? document.querySelector(sel) : sel;
+    if (!el) return;
+    if (attr) el.setAttribute(attr, text);
+    else el.textContent = text;
+  }
+
+  function applyStaticDomLang() {
+    document.documentElement.lang = currentLang === "ru" ? "ru" : currentLang;
+    setText(".side-nav-title", t("brandTitle"));
+    setText(".side-nav-subtitle", t("brandSubtitle"));
+    setText(".side-nav", t("navAria"), "aria-label");
+    setText("#section-top h1", t("h1"));
+    setText("#section-top > p", t("headerSub"));
+    setText("#workflow-progress", t("workflowAria"), "aria-label");
+    const wf = document.querySelectorAll("#workflow-steps .workflow-step-label");
+    if (wf[0]) wf[0].textContent = t("wf1");
+    if (wf[1]) wf[1].textContent = t("wf2");
+    if (wf[2]) wf[2].textContent = t("wf3");
+    setText(".workflow-toast-text strong", t("toastTitle"));
+    setText(".workflow-toast-text span", t("toastText"));
+    const goto = document.querySelector("#workflow-toast-goto span");
+    if (goto) goto.textContent = t("toastGoto");
+    setText("#section-help > summary", t("helpSummary"));
+    setText("#section-upload .collapsible-title", t("uploadTitle"));
+    setText("#btn-upload-another", t("uploadAnother"));
+    const mobile = document.documentElement.classList.contains("mobile-ui");
+    setText(".drop-zone-title", mobile ? t("dropTitleMobile") : t("dropTitle"));
+    setText(".drop-zone-hint", mobile ? t("dropHintMobile") : t("dropHint"));
+    setText("#btn-pick-file", t("pickFile"));
+    const sampleBtn = document.querySelector("#btn-load-sample");
+    if (sampleBtn) {
+      const icon = sampleBtn.querySelector(".btn-load-sample-icon");
+      sampleBtn.childNodes.forEach((n) => {
+        if (n.nodeType === 3 && n.textContent.trim()) n.textContent = " " + t("loadSample");
+      });
+      // rebuild text preserving icon
+      const ic = sampleBtn.querySelector(".btn-load-sample-icon");
+      sampleBtn.innerHTML = "";
+      if (ic) sampleBtn.appendChild(ic);
+      sampleBtn.appendChild(document.createTextNode(" " + t("loadSample")));
+    }
+    const sampleHint = document.querySelector(".upload-actions-hint");
+    if (sampleHint) {
+      const m = sampleHint.textContent.match(/(\d+)/);
+      const n = m ? m[1] : "95";
+      sampleHint.innerHTML = `${n} ${t("sampleHint")} · <code>пример_список_игроков.csv</code>`;
+    }
+    const statusText = document.querySelector("#status .status-banner-text");
+    if (statusText && !currentData) statusText.textContent = t("statusDefault");
+    setText("#section-caravan .collapsible-title", t("caravanTitle"));
+    setText("#caravan-formation-mode-title", t("formationTitle"));
+    setText(".caravan-formation-mode-desc", t("formationDesc"));
+    const formStatus = document.getElementById("formation-mode-status");
+    const formNow = document.querySelector(".caravan-formation-mode-current");
+    if (formNow) {
+      const strongVal = formStatus ? formStatus.textContent : t("contribOn");
+      formNow.innerHTML = `${t("formationNow")} <strong id="formation-mode-status">${priorityContribEnabled ? t("contribOn") : t("contribOff")}</strong>`;
+    }
+    setText("#btn-priority-contrib-on", t("contribOn"));
+    setText("#btn-priority-contrib-off", t("contribOff"));
+    setText("#btn-caravan-7 .btn-caravan-text strong", t("btn7Strong"));
+    setText("#btn-caravan-7 .btn-caravan-text small", t("btn7Small"));
+    setText("#btn-caravan-6 .btn-caravan-text strong", t("btn6Strong"));
+    setText("#btn-rebuild-caravan", t("rebuild"));
+    setText(".random-day-picker label", t("randomDayLabel"));
+    const daySel = document.getElementById("random-day-select");
+    if (daySel) {
+      for (let i = 1; i <= 7; i++) {
+        const opt = daySel.querySelector(`option[value="${i}"]`);
+        if (opt) opt.textContent = t("day" + i);
+      }
+    }
+    if (typeof updateRandomDayButtonLabel === "function") updateRandomDayButtonLabel();
+    const hint = document.querySelector(".caravan-hint");
+    if (hint) {
+      hint.innerHTML = `<strong>${t("hint7")}</strong>${t("hint7Text")} <strong>${t("hint6")}</strong>${t("hint6Text")}`;
+    }
+    setText("#caravan-empty-state .empty-state-title", t("emptyTitle"));
+    setText("#caravan-empty-state .empty-state-desc", t("emptyDesc"));
+    setText("#section-announcements .collapsible-title", t("annTitle"));
+    setText("#section-players .collapsible-title", t("playersTitle"));
+    setText("#btn-add-player", t("addPlayer"));
+    setText(".players-toolbar-hint", t("addPlayerHint"));
+    setText(".players-reorder-hint", t("reorderHint"));
+    const ths = document.querySelectorAll("#players-table thead th");
+    const thMap = [null, "thRank", "thNick", "thLevel", "thDuel", "thContrib", "thPriority", "thGroup"];
+    ths.forEach((th, i) => {
+      if (thMap[i]) th.textContent = t(thMap[i]);
+    });
+    // lang button
+    const langBtn = document.getElementById("lang-toggle");
+    if (langBtn) {
+      langBtn.title = t("langTitle");
+      const lab = langBtn.querySelector(".side-nav-lang-label");
+      if (lab) lab.textContent = LANG_LABELS[currentLang] + " · " + LANG_NAMES[currentLang];
+      const code = langBtn.querySelector(".side-nav-lang-code");
+      if (code) code.textContent = LANG_LABELS[currentLang];
+    }
+    // theme labels depend on theme + lang
+    applyTheme(getSavedTheme());
+    const navToggle = document.getElementById("side-nav-toggle");
+    if (navToggle) {
+      const expanded = navToggle.getAttribute("aria-expanded") !== "false";
+      navToggle.title = expanded ? t("collapseNav") : t("expandNav");
+    }
+  }
+
+  function applyLang(lang, opts = {}) {
+    if (!LANGS.includes(lang)) lang = "ru";
+    currentLang = lang;
+    try { localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (_) {}
+    applyDictToRuntime();
+    applyStaticDomLang();
+    if (typeof renderSideNavMenu === "function") renderSideNavMenu();
+    if (typeof renderBottomNav === "function") renderBottomNav();
+    if (typeof updatePriorityModeButtons === "function") updatePriorityModeButtons();
+    if (currentData && typeof renderTable === "function" && !opts.skipTable) {
+      renderTable(currentData, { preserveCaravan: true });
+    }
+    if (lastCaravanMode && typeof rebuildCaravan !== "function") {
+      /* schedule views refresh if present */
+    }
+    // refresh schedule/validation/announcements if already built
+    if (typeof hasCaravanResults === "function" && hasCaravanResults() && els.scheduleContainer) {
+      if (typeof lastBuild7 !== "undefined" && lastCaravanMode === "7days" && lastBuild7) {
+        buildAndShowCaravan(lastBuild7, "7days");
+      } else if (typeof lastBuild6 !== "undefined" && lastCaravanMode === "6days" && lastBuild6 && currentData) {
+        lastBuild6 = buildCaravan6Days(currentData, getSelectedRandomDay());
+        buildAndShowCaravan(lastBuild6, "6days");
+      }
+    }
+  }
+
+  function cycleLang() {
+    const idx = LANGS.indexOf(currentLang);
+    const next = LANGS[(idx + 1) % LANGS.length];
+    applyLang(next);
+  }
+
+  function initLang() {
+    applyLang(getSavedLang(), { skipTable: true });
+    document.getElementById("lang-toggle")?.addEventListener("click", cycleLang);
+  }
+
   const THEME_STORAGE_KEY = "karavan-theme";
 
   function getSavedTheme() {
@@ -5862,11 +6350,10 @@ footer {
     const btn = document.getElementById("theme-toggle");
     if (btn) {
       btn.setAttribute("aria-pressed", String(isDark));
-      btn.title = isDark ? "\u0421\u0432\u0435\u0442\u043B\u0430\u044F \u0442\u0435\u043C\u0430" : "\u0422\u0451\u043C\u043D\u0430\u044F \u0442\u0435\u043C\u0430";
+      const themeLabel = isDark ? t("themeLight") : t("themeDark");
+      btn.title = themeLabel;
       const label = btn.querySelector(".side-nav-theme-label");
-      if (label) {
-        label.textContent = isDark ? "\u0421\u0432\u0435\u0442\u043B\u0430\u044F \u0442\u0435\u043C\u0430" : "\u0422\u0451\u043C\u043D\u0430\u044F \u0442\u0435\u043C\u0430";
-      }
+      if (label) label.textContent = themeLabel;
     }
   }
 
@@ -6366,7 +6853,7 @@ footer {
   function updateRandomDayButtonLabel() {
     const day = getSelectedRandomDay();
     const sub = document.getElementById("btn-caravan-6-sub");
-    if (sub) sub.textContent = `${DAY_NAMES[day]} без пассажиров`;
+    if (sub) sub.textContent = `${DAY_NAMES[day]} ${t("randomDaySub")}`;
   }
   function buildAndShowCaravan6() {
     if (!currentData) {
@@ -6596,6 +7083,7 @@ footer {
     initSideNav();
     initBottomNav();
     initTheme();
+    initLang();
     setWorkflowStep(1);
     updateCaravanEmptyState();
     if (els.announcementsContainer) showAnnouncementsEmptyState(els.announcementsContainer);
