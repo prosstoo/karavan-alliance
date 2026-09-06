@@ -1659,6 +1659,130 @@ html.mobile-ui .btn-file-pick {
   line-height: 1;
 }
 
+
+.btn-ocr-scan {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: color-mix(in srgb, var(--accent-soft) 80%, var(--surface));
+  color: var(--accent);
+  font-weight: 600;
+}
+.btn-ocr-scan:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.btn-ocr-scan:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+.ocr-panel {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-alt);
+}
+.ocr-panel[hidden] { display: none !important; }
+.ocr-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  margin-bottom: 10px;
+}
+.ocr-panel-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.ocr-progress-text {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.ocr-progress-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.ocr-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+.ocr-log {
+  max-height: 90px;
+  overflow: auto;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+.ocr-draft-wrap {
+  overflow: auto;
+  max-height: 320px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.ocr-draft-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+.ocr-draft-table th,
+.ocr-draft-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.ocr-draft-table th {
+  position: sticky;
+  top: 0;
+  background: var(--table-head);
+  z-index: 1;
+}
+.ocr-draft-table tr.ocr-flag-check {
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
+.ocr-draft-table input[type="text"],
+.ocr-draft-table input[type="number"] {
+  width: 100%;
+  min-width: 4rem;
+  font: inherit;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text);
+}
+.ocr-type-select {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+}
+.ocr-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.ocr-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 8px 0 0;
+}
+
 .upload-actions-hint {
   font-size: 0.82rem;
   color: var(--muted);
@@ -2210,7 +2334,7 @@ html.mobile-ui .btn-file-pick {
   font-size: 0.72rem;
 }
 
-/* ——— Схема 20 мест ——— */
+/* ——— Схема 24 мест ——— */
 .seats-map {
   margin-bottom: 16px;
   padding: 12px 14px;
@@ -2296,7 +2420,7 @@ html.mobile-ui .btn-file-pick {
 .seats-map-wagon-seats {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 6px;
   min-width: 0;
 }
@@ -3681,8 +3805,8 @@ footer {
 
         <h3>Режимы каравана</h3>
         <ul>
-          <li><strong>Караван 7 дней</strong> — пассажиры Пн–Вс, 20 мест в день, 140 мест за неделю.</li>
-          <li><strong>ДЕНЬ РАНДОМА</strong> — пассажиры 6 дней из 7; в выбранный день рандома только водитель и VIP, 120 мест. День выбирается в блоке «Составление каравана».</li>
+          <li><strong>Караван 7 дней</strong> — пассажиры Пн–Вс, 24 места в день, 168 мест за неделю.</li>
+          <li><strong>ДЕНЬ РАНДОМА</strong> — пассажиры 6 дней из 7; в выбранный день рандома только водитель и VIP, 144 места. День выбирается в блоке «Составление каравана».</li>
         </ul>
 
         <h3>Расчёт приоритета</h3>
@@ -3734,12 +3858,49 @@ footer {
         </div>
       </div>
 
+
       <div class="upload-actions">
         <button type="button" id="btn-load-sample" class="btn btn-sm btn-load-sample">
           <span class="btn-load-sample-icon" aria-hidden="true">🧪</span>
           Загрузить тестовые данные из примера
         </button>
-        <span class="upload-actions-hint">95 игроков · <code>пример_список_игроков.csv</code></span>
+        <button type="button" id="btn-ocr-scan" class="btn btn-sm btn-ocr-scan">
+          <span class="btn-ocr-icon" aria-hidden="true">📷</span>
+          <span class="btn-ocr-label">Распознать скрины</span>
+        </button>
+        <input type="file" id="ocr-file-input" accept="image/png,image/jpeg,image/webp,image/gif,.png,.jpg,.jpeg,.webp,.gif" multiple hidden>
+        <span class="upload-actions-hint">91 игроков · <code>пример_список_игроков.csv</code></span>
+      </div>
+
+      <div id="ocr-panel" class="ocr-panel" hidden>
+        <div class="ocr-panel-head">
+          <h3 class="ocr-panel-title" id="ocr-panel-title">OCR скринов</h3>
+          <span class="ocr-progress-text" id="ocr-progress-text"></span>
+        </div>
+        <div class="ocr-progress-bar" aria-hidden="true"><div class="ocr-progress-fill" id="ocr-progress-fill"></div></div>
+        <div class="ocr-log" id="ocr-log"></div>
+        <div class="ocr-draft-wrap" id="ocr-draft-wrap" hidden>
+          <table class="ocr-draft-table" id="ocr-draft-table">
+            <thead>
+              <tr>
+                <th data-ocr-th="nick">Ник</th>
+                <th data-ocr-th="level">Ур.</th>
+                <th data-ocr-th="duel">Дуэль</th>
+                <th data-ocr-th="contrib">Взносы</th>
+                <th data-ocr-th="src">Источник</th>
+                <th data-ocr-th="type">Тип экрана</th>
+                <th data-ocr-th="check">Проверить</th>
+              </tr>
+            </thead>
+            <tbody id="ocr-draft-tbody"></tbody>
+          </table>
+        </div>
+        <p class="ocr-hint" id="ocr-hint">Можно загрузить несколько скринов рейтинга. Скрин взносов необязателен. Проверьте ники перед применением.</p>
+        <div class="ocr-panel-actions">
+          <button type="button" id="btn-ocr-stop" class="btn btn-sm" hidden>Стоп</button>
+          <button type="button" id="btn-ocr-apply" class="btn btn-sm btn-primary" hidden>Применить в список</button>
+          <button type="button" id="btn-ocr-cancel" class="btn btn-sm" hidden>Отмена</button>
+        </div>
       </div>
 
       <div id="status" class="status-banner" role="status" aria-live="polite" data-type="info">
@@ -3770,7 +3931,7 @@ footer {
           <span class="btn-caravan-icon" aria-hidden="true">🚂</span>
           <span class="btn-caravan-text">
             <strong>Караван 7 дней</strong>
-            <small>Пн–Вс · 140 мест</small>
+            <small>Пн–Вс · 168 мест</small>
           </span>
         </button>
         <button type="button" id="btn-caravan-6" class="btn btn-secondary btn-caravan" disabled>
@@ -3795,8 +3956,8 @@ footer {
         </select>
       </div>
       <p class="caravan-hint">
-        <strong>7 дней</strong> — пассажиры Пн–Вс (20/день, 140 мест).
-        <strong>ДЕНЬ РАНДОМА</strong> — пассажиры 6 дней; в выбранный день только водитель и VIP (120 мест).
+        <strong>7 дней</strong> — пассажиры Пн–Вс (24/день, 168 мест).
+        <strong>ДЕНЬ РАНДОМА</strong> — пассажиры 6 дней; в выбранный день только водитель и VIP (144 места).
       </p>
       <div id="caravan-empty-state" class="empty-state empty-state-caravan" hidden>
         <div class="empty-state-icon" aria-hidden="true">
@@ -3894,14 +4055,14 @@ footer {
   <!-- Встроенные скрипты (один файл) -->
   <script>
 (function (w) {
-  w.KARAVAN_SAMPLE_CSV = "Номер;Ник;Уровень;Ранг (Дуэль);Ранг (Взносы);Приоритет;;;Пояснение;Значение\r\n1;PROvokaTOR;30;1;13;;;;Идентифицировано ников;95\r\n2;BOMBARDIER;28;2;13;;;;Число участников в альянсе на скрине;95\r\n3;devyy;30;3;13;;;;Макс. ранг взносов;13\r\n4;SenjorTomato;30;4;13;;;;Макс. ранг дуэли;96\r\n5;Аллегрова;30;5;13;;;;Взносы: только известные с рейтинга (остальным 13);\r\n6;◇ZloiPAPA◇;30;6;12;;;;;\r\n7;lBlackFlint;29;7;13;;;;;\r\n8;Hitter;28;8;13;;;;;\r\n9;BAGIIGR;27;9;6;;;;;\r\n10;Layrouse;29;10;13;;;;;\r\n11;Tim2;27;11;13;;;;;\r\n12;страх;27;12;13;;;;;\r\n13;KKKe;30;13;13;;;;;\r\n14;LAMPOCHKA;30;14;5;;;;;\r\n15;Plytofka;29;15;3;;;;;\r\n16;nevyy;30;16;13;;;;;\r\n17;MasoudEsm;29;17;13;;;;;\r\n18;Maraniil;29;18;13;;;;;\r\n19;AtAman;28;19;4;;;;;\r\n20;ДядяВова;28;20;13;;;;;\r\n21;TaraKash;27;21;13;;;;;\r\n22;---КИС---;28;22;13;;;;;\r\n23;KomstoK;29;23;13;;;;;\r\n24;VishenkA;28;24;2;;;;;\r\n25;DziL;29;25;13;;;;;\r\n26;DocSirena;29;26;13;;;;;\r\n27;Tusker777;27;27;13;;;;;\r\n28;Solnce;29;28;13;;;;;\r\n29;Lovchaya;28;29;13;;;;;\r\n30;VaRvArTTT;28;31;13;;;;;\r\n31;★BipolarStar★;29;32;13;;;;;\r\n32;Klapan;28;33;13;;;;;\r\n33;General-Alcohol;29;34;13;;;;;\r\n34;Casstiell;28;35;13;;;;;\r\n35;DzikAlfa;27;36;13;;;;;\r\n36;Лемниската;28;37;13;;;;;\r\n37;Dze;28;38;13;;;;;\r\n38;BadGirl69;22;39;13;;;;;\r\n39;《Kochō》;28;40;13;;;;;\r\n40;Domino777;27;41;13;;;;;\r\n41;YodasTR;26;42;13;;;;;\r\n42;friendWwW;28;43;13;;;;;\r\n43;MixturA;28;44;7;;;;;\r\n44;Mielczara;25;45;13;;;;;\r\n45;Hkn;28;46;13;;;;;\r\n46;Enkell;29;47;13;;;;;\r\n47;88Алина88;28;48;13;;;;;\r\n48;★きゃら★;24;49;13;;;;;\r\n49;papaexxxyummy;26;50;13;;;;;\r\n50;DrEnchantress132;26;51;13;;;;;\r\n51;Пирожочек;27;52;13;;;;;\r\n52;•ДобрАя•МаМкА•;28;53;13;;;;;\r\n53;คɭєןคภ๔г๏;27;54;13;;;;;\r\n54;LeXa-;25;55;13;;;;;\r\n55;TymkalA;27;56;13;;;;;\r\n56;炊き込み御飯;28;57;13;;;;;\r\n57;DoctorNins;27;58;13;;;;;\r\n58;PolWilliam;28;59;13;;;;;\r\n59;ЧеРтЁнОкФкЕдАх;24;60;13;;;;;\r\n60;RamZz;28;61;13;;;;;\r\n61;AZEeyyub;27;62;13;;;;;\r\n62;Yaa°Blue;28;63;13;;;;;\r\n63;Yulie;24;64;13;;;;;\r\n64;brooze;24;65;13;;;;;\r\n65;변기에넣고서내려;24;66;13;;;;;\r\n66;SHAKAL;26;67;13;;;;;\r\n67;~•Кнопка•~;27;68;13;;;;;\r\n68;BenBlast;26;69;13;;;;;\r\n69;zOOm;26;70;13;;;;;\r\n70;Marmeladov69;25;71;13;;;;;\r\n71;Napasorn;26;72;13;;;;;\r\n72;tobi001;24;73;13;;;;;\r\n73;Daenerystargarye;23;74;13;;;;;\r\n74;아프라;26;75;13;;;;;\r\n75;Jesuscrafting;20;76;13;;;;;\r\n76;DrPer4ik;21;77;13;;;;;\r\n77;чистоезло;23;78;13;;;;;\r\n78;ToEachHisOwn;26;79;13;;;;;\r\n79;Aaadelina;26;80;13;;;;;\r\n80;doraa;24;81;13;;;;;\r\n81;Puziko;21;82;13;;;;;\r\n82;Esc45;25;83;13;;;;;\r\n83;Macowiec;27;84;13;;;;;\r\n84;Lisa-Patrekeevna;27;85;13;;;;;\r\n85;cdpkaktus;29;86;13;;;;;\r\n86;Defa1000;28;87;13;;;;;\r\n87;madnesss;28;88;1;;;;;\r\n88;Solevar;28;89;13;;;;;\r\n89;IDARQ;27;90;13;;;;;\r\n90;Marycl3;27;91;13;;;;;\r\n91;Arphira;26;92;13;;;;;\r\n92;HexaS;25;93;13;;;;;\r\n93;KrisFreed;23;94;13;;;;;\r\n94;Waldi84;22;95;13;;;;;\r\n95;DreamerDoom;19;96;13;;;;;\r\n";
+  w.KARAVAN_SAMPLE_CSV = "Номер;Ник;Уровень;Ранг (Дуэль);Ранг (Взносы);Приоритет;День;Вагон;Комментарий\r\n1;†PROvokaTOR†;30;1;13;1;;;\r\n2;KKKe;30;2;13;2;;;\r\n3;◇ZloiPAPA◇;30;3;12;3;;;\r\n4;страх;27;4;13;4;;;\r\n5;Defa1000;28;5;13;5;;;\r\n6;sølarmoon;;6;999;6;;;\r\n7;lBlackFlint;29;7;13;7;;;\r\n8;devyy;30;8;13;8;;;\r\n9;Аллегрова;30;9;13;9;;;\r\n10;Tusker777;27;10;13;10;;;\r\n11;ДядяВова;28;11;13;11;;;\r\n12;cdpkaktus;29;12;13;12;;;\r\n13;Dzil2°;;13;999;13;;;\r\n14;Layrouse;29;14;13;13;;;\r\n15;VaRvArTTT;28;15;13;13;;;\r\n16;SenjorTomato;30;16;13;13;;;\r\n17;Katerinaaaa;;17;999;17;;;\r\n18;Hkn;28;18;13;13;;;\r\n19;Solnce;29;19;13;13;;;\r\n20;Marani;;20;999;20;;;\r\n21;friendWwW;28;21;13;13;;;\r\n22;MixturA;28;22;7;7;;;\r\n23;TymkalA;27;23;13;13;;;\r\n24;HexaS;25;24;13;13;;;\r\n25;LAMPOCHKA;30;25;5;5;;;\r\n26;AtAman;28;26;4;4;;;\r\n27;DziL;29;27;13;13;;;\r\n28;Arphira;26;28;13;13;;;\r\n29;AnkaNur;;29;999;29;;;\r\n30;《Kochō》;28;30;13;13;;;\r\n31;KomstoK;29;31;13;13;;;\r\n32;General-Alcohol;29;32;13;13;;;\r\n33;YodasTR;26;33;13;13;;;\r\n34;IDARQ;27;34;13;13;;;\r\n35;VishenkA;28;35;2;2;;;\r\n36;Лемниската;28;36;13;13;;;\r\n37;SHAKAL;26;37;13;13;;;\r\n38;Klapan;28;38;13;13;;;\r\n39;TaifunDevilry;;39;999;39;;;\r\n40;LeXa-;25;40;13;13;;;\r\n41;Mielczara;25;41;13;13;;;\r\n42;ReviVal;;42;999;42;;;\r\n43;★BipolarStar★;29;43;13;13;;;\r\n44;•ДоБрАя•МаМкА•;28;44;13;13;;;\r\n45;88Алина88;28;45;13;13;;;\r\n46;PolWilliam;28;46;13;13;;;\r\n47;Dze;28;47;13;13;;;\r\n48;KrisFreed;23;48;13;13;;;\r\n49;RamZz;28;49;13;13;;;\r\n50;madnesss;28;50;1;1;;;\r\n51;Lovchaya;28;51;13;13;;;\r\n52;Casstiell;28;52;13;13;;;\r\n53;doraa;24;53;13;13;;;\r\n54;ToEachHisOwn;26;54;13;13;;;\r\n55;Pink-Princess;;55;999;55;;;\r\n56;MasoudEsm;29;56;13;13;;;\r\n57;★きゃら★;24;57;13;13;;;\r\n58;Shunyusik;;58;999;58;;;\r\n59;Domino777;27;59;13;13;;;\r\n60;Marycl3;27;60;13;13;;;\r\n61;Salihh41;;61;999;61;;;\r\n62;DoctorNins;27;62;13;13;;;\r\n63;brooze;24;63;13;13;;;\r\n64;Yaa°Blue;28;64;13;13;;;\r\n65;Yulie;24;65;13;13;;;\r\n66;zOOm;26;66;13;13;;;\r\n67;AZEeyyub;27;67;13;13;;;\r\n68;BenBlast;26;68;13;13;;;\r\n69;NailenPR;;69;999;69;;;\r\n70;Shterman;;70;999;70;;;\r\n71;AFRODİT;;71;999;71;;;\r\n72;Lisa-Patrekeevna;27;72;13;13;;;\r\n73;변기에넣고서내려;24;73;13;13;;;\r\n74;~▪Кнопка▪~;27;74;13;13;;;\r\n75;Løveungen;;75;999;75;;;\r\n76;GOLI;;76;999;76;;;\r\n77;Napasorn;26;77;13;13;;;\r\n78;Dagoer;;78;999;78;;;\r\n79;Jesuscrafting;20;79;13;13;;;\r\n80;Umbra4989;;80;999;80;;;\r\n81;Marmeladov69;25;81;13;13;;;\r\n82;DreamerDoom;19;82;13;13;;;\r\n83;AlexSN;;83;999;83;;;\r\n84;Aaaadelina;26;84;13;13;;;\r\n85;Asdeum;;85;999;85;;;\r\n86;Kaifolomwik;;86;999;86;;;\r\n87;честный;;87;999;87;;;\r\n88;tobi001;24;88;13;13;;;\r\n89;Doctor-Cesar-;;89;999;89;;;\r\n90;⌛Aʟᴇ|ᴀɴᴅʀᴏ⌛;;90;999;90;;;\r\n91;DjAlexeyHarder;;91;999;91;;;\r\n";
 })(window);
 
 
 (() => {
   // js/config.js
   var WAGON_COUNT = 4;
-  var WAGON_CAPACITY = 5;
+  var WAGON_CAPACITY = 6;
   var DAY_COUNT = 7;
   var TOP_COUNT = 14;
   var DRIVER_COUNT = 7;
@@ -4674,11 +4835,11 @@ footer {
   var MODE_LABELS = {
     "7days": {
       badge: "\u041A\u0430\u0440\u0430\u0432\u0430\u043D 7 \u0434\u043D\u0435\u0439",
-      desc: "\u041F\u0430\u0441\u0441\u0430\u0436\u0438\u0440\u044B \u041F\u043D\u2013\u0412\u0441 \xB7 4\xD75 = 20 \u043C\u0435\u0441\u0442 \u0432 \u0434\u0435\u043D\u044C \xB7 140 \u043C\u0435\u0441\u0442 \u0437\u0430 \u043D\u0435\u0434\u0435\u043B\u044E"
+      desc: "\u041F\u0430\u0441\u0441\u0430\u0436\u0438\u0440\u044B \u041F\u043D\u2013\u0412\u0441 \xB7 4\xD75 = 24 \u043C\u0435\u0441\u0442\u0430 \u0432 \u0434\u0435\u043D\u044C \xB7 168 \u043C\u0435\u0441\u0442 \u0437\u0430 \u043D\u0435\u0434\u0435\u043B\u044E"
     },
     "6days": {
       badge: "ДЕНЬ РАНДОМА",
-      desc: "Пассажиры 6 дней · выбранный день: только водитель и VIP · 120 мест за неделю"
+      desc: "Пассажиры 6 дней · выбранный день: только водитель и VIP · 144 места за неделю"
     }
   };
   function getDayDisplayData(week, dayNum) {
@@ -4771,7 +4932,7 @@ footer {
     return `
     <div class="seats-map">
       <div class="seats-map-head">
-        <span class="seats-map-title">\u0421\u0445\u0435\u043C\u0430 20 \u043C\u0435\u0441\u0442</span>
+        <span class="seats-map-title">\u0421\u0445\u0435\u043C\u0430 24 \u043C\u0435\u0441\u0442\u0430</span>
         <div class="seats-map-legend" aria-hidden="true">
           <span class="seats-map-legend-item legend-driver">\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u0438</span>
           <span class="seats-map-legend-item legend-vip">VIP</span>
@@ -5925,6 +6086,38 @@ footer {
       pickFile: "Выбрать файл",
       loadSample: "Загрузить тестовые данные из примера",
       sampleHint: "игроков",
+      ocrBtn: "Распознать скрины",
+      ocrPanelTitle: "OCR скринов",
+      ocrHint: "Можно загрузить несколько скринов рейтинга (обрежется нижняя sticky-панель). Экран взносов необязателен. Проверьте ники со спецсимволами перед применением.",
+      ocrStop: "Стоп",
+      ocrApply: "Применить в список",
+      ocrCancel: "Отмена",
+      ocrThNick: "Ник",
+      ocrThLevel: "Ур.",
+      ocrThDuel: "Дуэль",
+      ocrThContrib: "Взносы",
+      ocrThSrc: "Источник",
+      ocrThType: "Тип экрана",
+      ocrThCheck: "Проверить",
+      ocrTypeDuel: "Дуэль",
+      ocrTypeContrib: "Взносы",
+      ocrLoadingEngine: "Загрузка Tesseract…",
+      ocrRunning: "Распознавание скринов…",
+      ocrStart: "Файлов: {n}",
+      ocrFile: "Файл",
+      ocrStopped: "Остановлено пользователем",
+      ocrStopping: "Остановка…",
+      ocrRetyped: "тип уточнён",
+      ocrUnknownTypes: "Неопределённый тип",
+      ocrMergeSummary: "Дуэль: {duel}, взносы: {contrib}, итого игроков: {total}",
+      ocrDraftReady: "Черновик готов: {n} игроков. Проверьте и нажмите «Применить».",
+      ocrApplied: "Список из OCR применён, игроков:",
+      ocrAppliedName: "OCR скрины",
+      ocrCancelled: "OCR отменён.",
+      ocrErrScript: "Не удалось загрузить Tesseract.js. Проверьте интернет.",
+      ocrErrNoImages: "Выберите изображения (PNG, JPG, WEBP).",
+      ocrErrEmpty: "Не удалось распознать игроков. Попробуйте более чёткие скрины.",
+
       statusDefault: "Выберите файл со списком игроков (.xlsx, .xlsm или .csv).",
       caravanTitle: "Составление каравана",
       formationTitle: "Режим формирования каравана",
@@ -5933,15 +6126,15 @@ footer {
       contribOn: "Взносы +10%",
       contribOff: "Только битва",
       btn7Strong: "Караван 7 дней",
-      btn7Small: "Пн–Вс · 140 мест",
+      btn7Small: "Пн–Вс · 168 мест",
       btn6Strong: "ДЕНЬ РАНДОМА",
       btn6Small: "без пассажиров в выбранный день",
       rebuild: "Пересобрать караван",
       randomDayLabel: "День рандома (без пассажиров):",
       hint7: "7 дней",
-      hint7Text: " — пассажиры Пн–Вс (20/день, 140 мест).",
+      hint7Text: " — пассажиры Пн–Вс (24/день, 168 мест).",
       hint6: "ДЕНЬ РАНДОМА",
-      hint6Text: " — пассажиры 6 дней; в выбранный день только водитель и VIP (120 мест).",
+      hint6Text: " — пассажиры 6 дней; в выбранный день только водитель и VIP (144 места).",
       emptyTitle: "Караван ещё не собран",
       emptyDesc: "Нажмите «Караван 7 дней» или «ДЕНЬ РАНДОМА» — здесь появятся расписание и проверка правил.",
       annTitle: "Объявления для чата",
@@ -5962,9 +6155,9 @@ footer {
       act4: "Улучшение героев", act5: "Обучение солдат", act6: "Война королевств", act7: "Выходной",
       groupDRIVER: "Водитель", groupVIP: "VIP", groupMIDDLE: "Средняя", groupLAST30: "Последние 30",
       mode7badge: "Караван 7 дней",
-      mode7desc: "Пассажиры Пн–Вс · 4×5 = 20 мест в день · 140 мест за неделю",
+      mode7desc: "Пассажиры Пн–Вс · 4×6 = 24 места в день · 168 мест за неделю",
       mode6badge: "ДЕНЬ РАНДОМА",
-      mode6desc: "Пассажиры 6 дней · выбранный день: только водитель и VIP · 120 мест за неделю",
+      mode6desc: "Пассажиры 6 дней · выбранный день: только водитель и VIP · 144 места за неделю",
       navHelp: "Инструкция", navUpload: "Загрузка файла", navCaravan: "Составление каравана",
       navPlayers: "Список игроков", navAnn: "Объявления для чата",
       navSchedule: "Расписание", navOverview: "Водители и VIP", navDays: "Детали по дням",
@@ -6005,6 +6198,38 @@ footer {
       pickFile: "Choose file",
       loadSample: "Load sample test data",
       sampleHint: "players",
+      ocrBtn: "Scan screenshots",
+      ocrPanelTitle: "Screenshot OCR",
+      ocrHint: "Upload several ranking screenshots (sticky bar is cropped). Contribution screen is optional. Review nicks with special symbols before applying.",
+      ocrStop: "Stop",
+      ocrApply: "Apply to list",
+      ocrCancel: "Cancel",
+      ocrThNick: "Nick",
+      ocrThLevel: "Lv.",
+      ocrThDuel: "Duel",
+      ocrThContrib: "Contrib",
+      ocrThSrc: "Source",
+      ocrThType: "Screen type",
+      ocrThCheck: "Review",
+      ocrTypeDuel: "Duel",
+      ocrTypeContrib: "Contrib",
+      ocrLoadingEngine: "Loading Tesseract…",
+      ocrRunning: "Recognizing screenshots…",
+      ocrStart: "Files: {n}",
+      ocrFile: "File",
+      ocrStopped: "Stopped by user",
+      ocrStopping: "Stopping…",
+      ocrRetyped: "type refined",
+      ocrUnknownTypes: "Unknown type",
+      ocrMergeSummary: "Duel: {duel}, contrib: {contrib}, players: {total}",
+      ocrDraftReady: "Draft ready: {n} players. Review and press Apply.",
+      ocrApplied: "OCR list applied, players:",
+      ocrAppliedName: "OCR screenshots",
+      ocrCancelled: "OCR cancelled.",
+      ocrErrScript: "Failed to load Tesseract.js. Check your internet connection.",
+      ocrErrNoImages: "Choose images (PNG, JPG, WEBP).",
+      ocrErrEmpty: "No players recognized. Try clearer screenshots.",
+
       statusDefault: "Choose a player list file (.xlsx, .xlsm or .csv).",
       caravanTitle: "Build caravan",
       formationTitle: "Caravan formation mode",
@@ -6013,15 +6238,15 @@ footer {
       contribOn: "Contrib +10%",
       contribOff: "Battle only",
       btn7Strong: "7-day caravan",
-      btn7Small: "Mon–Sun · 140 seats",
+      btn7Small: "Mon–Sun · 168 seats",
       btn6Strong: "RANDOM DAY",
       btn6Small: "no passengers on selected day",
       rebuild: "Rebuild caravan",
       randomDayLabel: "Random day (no passengers):",
       hint7: "7 days",
-      hint7Text: " — passengers Mon–Sun (20/day, 140 seats).",
+      hint7Text: " — passengers Mon–Sun (24/day, 168 seats).",
       hint6: "RANDOM DAY",
-      hint6Text: " — passengers 6 days; on selected day driver & VIP only (120 seats).",
+      hint6Text: " — passengers 6 days; on selected day driver & VIP only (144 seats).",
       emptyTitle: "Caravan not built yet",
       emptyDesc: "Press “7-day caravan” or “RANDOM DAY” — schedule and rule checks will appear here.",
       annTitle: "Chat announcements",
@@ -6042,9 +6267,9 @@ footer {
       act4: "Hero upgrades", act5: "Troop training", act6: "Kingdom war", act7: "Day off",
       groupDRIVER: "Driver", groupVIP: "VIP", groupMIDDLE: "Middle", groupLAST30: "Last 30",
       mode7badge: "7-day caravan",
-      mode7desc: "Passengers Mon–Sun · 4×5 = 20 seats/day · 140 seats/week",
+      mode7desc: "Passengers Mon–Sun · 4×6 = 24 seats/day · 168 seats/week",
       mode6badge: "RANDOM DAY",
-      mode6desc: "Passengers 6 days · selected day: driver & VIP only · 120 seats/week",
+      mode6desc: "Passengers 6 days · selected day: driver & VIP only · 144 seats/week",
       navHelp: "Help", navUpload: "File upload", navCaravan: "Build caravan",
       navPlayers: "Player list", navAnn: "Chat announcements",
       navSchedule: "Schedule", navOverview: "Drivers & VIP", navDays: "Day details",
@@ -6085,6 +6310,38 @@ footer {
       pickFile: "Elegir archivo",
       loadSample: "Cargar datos de ejemplo",
       sampleHint: "jugadores",
+      ocrBtn: "Reconocer capturas",
+      ocrPanelTitle: "OCR de capturas",
+      ocrHint: "Puedes subir varias capturas del ranking (se recorta la barra sticky). La de aportes es opcional. Revisa los nicks con símbolos especiales antes de aplicar.",
+      ocrStop: "Parar",
+      ocrApply: "Aplicar a la lista",
+      ocrCancel: "Cancelar",
+      ocrThNick: "Nick",
+      ocrThLevel: "Niv.",
+      ocrThDuel: "Duelo",
+      ocrThContrib: "Aportes",
+      ocrThSrc: "Fuente",
+      ocrThType: "Tipo",
+      ocrThCheck: "Revisar",
+      ocrTypeDuel: "Duelo",
+      ocrTypeContrib: "Aportes",
+      ocrLoadingEngine: "Cargando Tesseract…",
+      ocrRunning: "Reconociendo capturas…",
+      ocrStart: "Archivos: {n}",
+      ocrFile: "Archivo",
+      ocrStopped: "Detenido por el usuario",
+      ocrStopping: "Deteniendo…",
+      ocrRetyped: "tipo ajustado",
+      ocrUnknownTypes: "Tipo desconocido",
+      ocrMergeSummary: "Duelo: {duel}, aportes: {contrib}, jugadores: {total}",
+      ocrDraftReady: "Borrador listo: {n} jugadores. Revisa y pulsa Aplicar.",
+      ocrApplied: "Lista OCR aplicada, jugadores:",
+      ocrAppliedName: "Capturas OCR",
+      ocrCancelled: "OCR cancelado.",
+      ocrErrScript: "No se pudo cargar Tesseract.js. Comprueba internet.",
+      ocrErrNoImages: "Elige imágenes (PNG, JPG, WEBP).",
+      ocrErrEmpty: "No se reconocieron jugadores. Prueba capturas más nítidas.",
+
       statusDefault: "Elige un archivo con la lista de jugadores (.xlsx, .xlsm o .csv).",
       caravanTitle: "Armar caravana",
       formationTitle: "Modo de formación",
@@ -6093,15 +6350,15 @@ footer {
       contribOn: "Aportes +10%",
       contribOff: "Solo batalla",
       btn7Strong: "Caravana 7 días",
-      btn7Small: "Lun–Dom · 140 asientos",
+      btn7Small: "Lun–Dom · 168 asientos",
       btn6Strong: "DÍA ALEATORIO",
       btn6Small: "sin pasajeros el día elegido",
       rebuild: "Rearmar caravana",
       randomDayLabel: "Día aleatorio (sin pasajeros):",
       hint7: "7 días",
-      hint7Text: " — pasajeros Lun–Dom (20/día, 140 asientos).",
+      hint7Text: " — pasajeros Lun–Dom (24/día, 168 asientos).",
       hint6: "DÍA ALEATORIO",
-      hint6Text: " — pasajeros 6 días; el día elegido solo conductor y VIP (120 asientos).",
+      hint6Text: " — pasajeros 6 días; el día elegido solo conductor y VIP (144 asientos).",
       emptyTitle: "La caravana aún no está armada",
       emptyDesc: "Pulsa «Caravana 7 días» o «DÍA ALEATORIO» — aquí aparecerán el horario y las reglas.",
       annTitle: "Anuncios para el chat",
@@ -6122,9 +6379,9 @@ footer {
       act4: "Mejora de héroes", act5: "Entrenamiento", act6: "Guerra de reinos", act7: "Descanso",
       groupDRIVER: "Conductor", groupVIP: "VIP", groupMIDDLE: "Media", groupLAST30: "Últimos 30",
       mode7badge: "Caravana 7 días",
-      mode7desc: "Pasajeros Lun–Dom · 4×5 = 20 asientos/día · 140 asientos/semana",
+      mode7desc: "Pasajeros Lun–Dom · 4×6 = 24 asientos/día · 168 asientos/semana",
       mode6badge: "DÍA ALEATORIO",
-      mode6desc: "Pasajeros 6 días · día elegido: solo conductor y VIP · 120 asientos/semana",
+      mode6desc: "Pasajeros 6 días · día elegido: solo conductor y VIP · 144 asientos/semana",
       navHelp: "Ayuda", navUpload: "Carga de archivo", navCaravan: "Armar caravana",
       navPlayers: "Lista de jugadores", navAnn: "Anuncios del chat",
       navSchedule: "Horario", navOverview: "Conductores y VIP", navDays: "Detalle por días",
@@ -6274,6 +6531,7 @@ footer {
     ths.forEach((th, i) => {
       if (thMap[i]) th.textContent = t(thMap[i]);
     });
+    if (typeof applyOcrI18n === "function") applyOcrI18n();
     // lang button
     const langBtn = document.getElementById("lang-toggle");
     if (langBtn) {
@@ -6952,6 +7210,637 @@ footer {
       setStatus(err instanceof Error ? err.message : String(err), "error");
     }
   }
+
+  // --- OCR screenshots (Tesseract.js CDN) ---
+  const OCR_UNKNOWN_CONTRIB = 999;
+  const TESSERACT_CDN = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+  let ocrWorker = null;
+  let ocrAbort = false;
+  let ocrDraftPlayers = [];
+  let ocrFileMeta = [];
+
+  function ensureOcrUiRefs() {
+    return {
+      panel: document.getElementById("ocr-panel"),
+      progressText: document.getElementById("ocr-progress-text"),
+      progressFill: document.getElementById("ocr-progress-fill"),
+      log: document.getElementById("ocr-log"),
+      draftWrap: document.getElementById("ocr-draft-wrap"),
+      tbody: document.getElementById("ocr-draft-tbody"),
+      btnScan: document.getElementById("btn-ocr-scan"),
+      btnStop: document.getElementById("btn-ocr-stop"),
+      btnApply: document.getElementById("btn-ocr-apply"),
+      btnCancel: document.getElementById("btn-ocr-cancel"),
+      fileInput: document.getElementById("ocr-file-input"),
+      hint: document.getElementById("ocr-hint"),
+      title: document.getElementById("ocr-panel-title")
+    };
+  }
+
+  function ocrLog(msg) {
+    const ui = ensureOcrUiRefs();
+    if (!ui.log) return;
+    const line = String(msg || "");
+    ui.log.textContent = ui.log.textContent ? ui.log.textContent + "\n" + line : line;
+    ui.log.scrollTop = ui.log.scrollHeight;
+  }
+
+  function setOcrProgress(done, total, label) {
+    const ui = ensureOcrUiRefs();
+    const pct = total ? Math.round(done / total * 100) : 0;
+    if (ui.progressFill) ui.progressFill.style.width = pct + "%";
+    if (ui.progressText) {
+      ui.progressText.textContent = label || (total ? `${done}/${total} (${pct}%)` : "");
+    }
+  }
+
+  function showOcrPanel(show) {
+    const ui = ensureOcrUiRefs();
+    if (ui.panel) ui.panel.hidden = !show;
+  }
+
+  function resetOcrDraftUi() {
+    const ui = ensureOcrUiRefs();
+    ocrDraftPlayers = [];
+    ocrFileMeta = [];
+    if (ui.log) ui.log.textContent = "";
+    if (ui.tbody) ui.tbody.innerHTML = "";
+    if (ui.draftWrap) ui.draftWrap.hidden = true;
+    if (ui.btnApply) ui.btnApply.hidden = true;
+    if (ui.btnCancel) ui.btnCancel.hidden = true;
+    if (ui.btnStop) ui.btnStop.hidden = true;
+    setOcrProgress(0, 0, "");
+  }
+
+  function loadTesseractScript() {
+    if (typeof Tesseract !== "undefined") return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-karavan-tesseract]');
+      if (existing) {
+        existing.addEventListener("load", () => resolve());
+        existing.addEventListener("error", () => reject(new Error(t("ocrErrScript"))));
+        return;
+      }
+      const s = document.createElement("script");
+      s.src = TESSERACT_CDN;
+      s.async = true;
+      s.dataset.karavanTesseract = "1";
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error(t("ocrErrScript")));
+      document.head.appendChild(s);
+    });
+  }
+
+
+  async function getOcrWorker() {
+    await loadTesseractScript();
+    if (ocrWorker) return ocrWorker;
+    ocrLog(t("ocrLoadingEngine"));
+    ocrWorker = await Tesseract.createWorker("rus+eng", 1, {
+      logger: () => {}
+    });
+    await ocrWorker.setParameters({
+      tessedit_pageseg_mode: "6",
+      preserve_interword_spaces: "1"
+    });
+    return ocrWorker;
+  }
+
+  function normalizeOcrNick(raw) {
+    return String(raw || "")
+      .replace(/\[REVI\]\s*Revival/gi, "")
+      .replace(/\bR[1-5]\b/gi, "")
+      .replace(/[|]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function nickKey(nick) {
+    return normalizeOcrNick(nick).toLowerCase().replace(/[^a-z0-9а-яё]/gi, "");
+  }
+
+  function loadImageFromFile(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(img);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("image load failed"));
+      };
+      img.src = url;
+    });
+  }
+
+  /** Crop chrome (top tabs/status, bottom sticky green bar) and boost contrast for Tesseract. */
+  async function preprocessOcrImage(file) {
+    const img = await loadImageFromFile(file);
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    const topCut = Math.round(h * 0.16);
+    const bottomCut = Math.round(h * 0.12);
+    const cropH = Math.max(40, h - topCut - bottomCut);
+    const scale = w < 900 ? 2.2 : w < 1200 ? 1.6 : 1.25;
+    const outW = Math.round(w * scale);
+    const outH = Math.round(cropH * scale);
+    const canvas = document.createElement("canvas");
+    canvas.width = outW;
+    canvas.height = outH;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(img, 0, topCut, w, cropH, 0, 0, outW, outH);
+    const imageData = ctx.getImageData(0, 0, outW, outH);
+    const d = imageData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      // grayscale + mild contrast stretch
+      let g = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+      g = (g - 128) * 1.35 + 128;
+      if (g < 0) g = 0;
+      if (g > 255) g = 255;
+      // soft threshold toward black/white for UI text
+      if (g > 185) g = 255;
+      else if (g < 95) g = 0;
+      d[i] = d[i + 1] = d[i + 2] = g;
+    }
+    ctx.putImageData(imageData, 0, 0);
+    return canvas;
+  }
+
+  function detectScreenType(text) {
+    const t0 = String(text || "").toLowerCase();
+    const hasContribTab =
+      /взнос/.test(t0) ||
+      /вклад/.test(t0) ||
+      /доктор/.test(t0) ||
+      /силов(ой|ого)?\s*рейтинг/.test(t0) ||
+      /мощь/.test(t0) && /убийств/.test(t0);
+    const hasDuelTab =
+      /очки/.test(t0) ||
+      /игрок/.test(t0) ||
+      /мой альянс/.test(t0) ||
+      /ежедневн/.test(t0) ||
+      /еженедельн/.test(t0);
+    // Score magnitudes: duel points are usually millions; contrib thousands
+    const nums = [...String(text || "").matchAll(/\b(\d{1,3}(?:[ ,]\d{3}){2,}|\d{7,})\b/g)];
+    const bigScores = nums.length;
+    if (hasContribTab && (/взнос|вклад|доктор/.test(t0) || bigScores < 2)) return "contrib";
+    if (hasDuelTab || bigScores >= 2) return "duel";
+    if (hasContribTab) return "contrib";
+    return "unknown";
+  }
+
+  function isNoiseLine(line) {
+    const s = line.toLowerCase();
+    if (!s) return true;
+    if (/^(ранг|игрок|очки|рейтинг|вклад|доктор|ежедневно|еженедельно|мой альянс|награда|мощь|убийства|взнос)$/i.test(line)) return true;
+    if (/силов/.test(s)) return true;
+    if (/назначает/.test(s)) return true;
+    if (/^\[revi\]/i.test(line)) return true;
+    if (/revival/i.test(line) && line.length < 20) return true;
+    if (/^r[1-5]$/i.test(line)) return true;
+    return false;
+  }
+
+  function parseScoreToken(tok) {
+    const n = String(tok || "").replace(/[ ,]/g, "");
+    if (!/^\d{3,}$/.test(n)) return null;
+    return n;
+  }
+
+  /**
+   * Parse ranking rows from OCR text.
+   * Handles: rank alone / rank+nick / nick / [REVI]Revival / points with commas.
+   * Drops sticky footer row (rank already seen, out of ascending order).
+   */
+  function parseRankLines(text, kind) {
+    const rawLines = String(text || "")
+      .split(/\r?\n/)
+      .map((l) => l.replace(/\s+/g, " ").trim())
+      .filter(Boolean);
+
+    const lines = [];
+    for (const l of rawLines) {
+      if (isNoiseLine(l)) continue;
+      // drop pure alliance lines
+      if (/^\[REVI\]/i.test(l) || /^revival$/i.test(l)) continue;
+      lines.push(l.replace(/\[REVI\]\s*Revival/gi, "").trim());
+    }
+
+    const scoreRe = /(\d{1,3}(?:[ ,]\d{3}){1,}|\d{4,9})\s*$/;
+    const rankOnlyRe = /^(\d{1,3})$/;
+    const rankStartRe = /^(\d{1,3})(?:[\).:]|\s+)(.+)$/;
+    const rows = [];
+    let i = 0;
+    while (i < lines.length) {
+      let line = lines[i];
+      let rank = null;
+      let nick = "";
+      let score = "";
+
+      let mRankOnly = line.match(rankOnlyRe);
+      let mRankStart = line.match(rankStartRe);
+      let mScore = line.match(scoreRe);
+
+      if (mRankOnly) {
+        rank = parseInt(mRankOnly[1], 10);
+        i += 1;
+        // collect following nick (skip empty / alliance leftovers)
+        while (i < lines.length && isNoiseLine(lines[i])) i += 1;
+        if (i < lines.length && !rankOnlyRe.test(lines[i]) && !scoreRe.test(lines[i].replace(/^\d{1,3}\s+/, "x "))) {
+          // if next is "12 345,678" only score — nick missing
+          const onlyScore = parseScoreToken(lines[i].replace(/\s/g, ""));
+          if (onlyScore && /^\d{1,3}([ ,]\d{3})+$/.test(lines[i])) {
+            score = onlyScore;
+            i += 1;
+          } else {
+            nick = normalizeOcrNick(lines[i]);
+            i += 1;
+            // optional score on same or next line
+            if (i < lines.length) {
+              const sc = lines[i].match(scoreRe);
+              if (sc && normalizeOcrNick(lines[i].replace(scoreRe, "")).length < 2) {
+                score = parseScoreToken(sc[1]) || "";
+                i += 1;
+              } else if (sc && rankStartRe.test(lines[i])) {
+                // next row starts — leave score empty
+              } else if (/^\d{1,3}([ ,]\d{3})+$/.test(lines[i])) {
+                score = parseScoreToken(lines[i]) || "";
+                i += 1;
+              }
+            }
+          }
+        }
+      } else if (mRankStart) {
+        rank = parseInt(mRankStart[1], 10);
+        let rest = mRankStart[2].trim();
+        const sc = rest.match(scoreRe);
+        if (sc) {
+          score = parseScoreToken(sc[1]) || "";
+          rest = rest.replace(scoreRe, "").trim();
+        }
+        nick = normalizeOcrNick(rest);
+        i += 1;
+        // score on next line
+        if (!score && i < lines.length && /^\d{1,3}([ ,]\d{3})+$/.test(lines[i])) {
+          score = parseScoreToken(lines[i]) || "";
+          i += 1;
+        }
+      } else if (mScore && !rankOnlyRe.test(line)) {
+        // nick + score without rank — skip (too ambiguous) unless previous pending
+        i += 1;
+        continue;
+      } else {
+        i += 1;
+        continue;
+      }
+
+      nick = normalizeOcrNick(nick)
+        .replace(/\bR[1-5]\b/gi, "")
+        .replace(/^\d+\s*/, "")
+        .trim();
+      // strip leftover score digits glued to nick
+      nick = nick.replace(/\s+\d{1,3}(?:[ ,]\d{3})+$/, "").trim();
+      nick = nick.replace(/[«»""]/g, "").trim();
+
+      if (rank == null || rank < 1 || rank > 200) continue;
+      if (!nick || nick.length < 2) continue;
+      if (/^\d+$/.test(nick)) continue;
+      if (/^(очки|ранг|игрок|вклад)$/i.test(nick)) continue;
+
+      // contrib scores are usually < 1e6; duel usually >= 1e6 — soft flag
+      const scoreNum = score ? parseInt(score, 10) : 0;
+      let needsCheck = nick.length > 22;
+      if (kind === "duel" && scoreNum > 0 && scoreNum < 100000) needsCheck = true;
+      if (kind === "contrib" && scoreNum > 500000) needsCheck = true;
+
+      rows.push({ rank, nick, kind, score, scoreNum, needsCheck });
+    }
+
+    // Keep ascending sequence; drop sticky footer (rank jump down after ascending)
+    rows.sort((a, b) => a.rank - b.rank);
+    const byRank = new Map();
+    for (const r of rows) {
+      if (!byRank.has(r.rank)) byRank.set(r.rank, r);
+    }
+    let ordered = [...byRank.values()].sort((a, b) => a.rank - b.rank);
+    // Remove trailing out-of-order sticky: if last few break monotonic scroll windows
+    // Also: if same nick appears twice, keep the one in sequential block
+    const nickSeen = new Map();
+    const cleaned = [];
+    for (const r of ordered) {
+      const k = nickKey(r.nick);
+      if (nickSeen.has(k)) {
+        // prefer earlier (list) over sticky duplicate
+        continue;
+      }
+      nickSeen.set(k, true);
+      cleaned.push(r);
+    }
+    // Drop isolated low ranks that appear after a high contiguous block (sticky footer OCR'd mid-page)
+    if (cleaned.length >= 3) {
+      const filtered = [];
+      for (let j = 0; j < cleaned.length; j++) {
+        const r = cleaned[j];
+        const prev = filtered[filtered.length - 1];
+        if (prev && r.rank < prev.rank - 2 && r.rank <= 15 && prev.rank >= 20) {
+          // likely sticky self-rank mixed in — skip
+          continue;
+        }
+        filtered.push(r);
+      }
+      return filtered;
+    }
+    return cleaned;
+  }
+
+  function mergeOcrResults(fileResults) {
+    const duelMap = new Map();
+    const contribMap = new Map();
+    const unknowns = [];
+
+    function addDuel(r) {
+      const k = nickKey(r.nick);
+      if (!k) return;
+      const prev = duelMap.get(k);
+      if (!prev || r.rank < prev.duelRank) {
+        duelMap.set(k, { nick: r.nick, duelRank: r.rank, needsCheck: !!r.needsCheck });
+      }
+    }
+    function addContrib(r) {
+      const k = nickKey(r.nick);
+      if (!k) return;
+      const prev = contribMap.get(k);
+      if (!prev || r.rank < prev.contribRank) {
+        contribMap.set(k, { nick: r.nick, contribRank: r.rank, needsCheck: !!r.needsCheck });
+      }
+    }
+
+    for (const fr of fileResults) {
+      let type = fr.type || "unknown";
+      let rows = fr.rows || [];
+      if (type === "unknown" || rows.length === 0) {
+        if (type === "unknown") unknowns.push(fr.name);
+        const asDuel = parseRankLines(fr.text, "duel");
+        const asContrib = parseRankLines(fr.text, "contrib");
+        // Prefer type by score sizes
+        const duelBig = asDuel.filter((r) => r.scoreNum >= 1000000).length;
+        const contribSmall = asContrib.filter((r) => r.scoreNum > 0 && r.scoreNum < 100000).length;
+        if (duelBig >= contribSmall && asDuel.length) {
+          type = "duel";
+          rows = asDuel;
+        } else if (asContrib.length) {
+          type = "contrib";
+          rows = asContrib;
+        } else {
+          rows = asDuel.length >= asContrib.length ? asDuel : asContrib;
+          type = asDuel.length >= asContrib.length ? "duel" : "contrib";
+        }
+      }
+      for (const r of rows) {
+        if (type === "contrib") addContrib(r);
+        else addDuel(r);
+      }
+    }
+
+    const players = [];
+    const usedContrib = new Set();
+    const duelList = [...duelMap.values()].sort((a, b) => a.duelRank - b.duelRank);
+    for (const d of duelList) {
+      const k = nickKey(d.nick);
+      const c = contribMap.get(k);
+      if (c) usedContrib.add(k);
+      players.push({
+        nick: d.nick,
+        level: "",
+        duelRank: d.duelRank,
+        contribRank: c ? c.contribRank : OCR_UNKNOWN_CONTRIB,
+        source: c ? "duel+contrib" : "duel",
+        needsCheck: !!(d.needsCheck || (c && c.needsCheck)),
+        screenType: "duel"
+      });
+    }
+    let nextDuel = duelList.length ? Math.max(...duelList.map((d) => d.duelRank)) + 1 : 1;
+    for (const [k, c] of contribMap) {
+      if (usedContrib.has(k)) continue;
+      players.push({
+        nick: c.nick,
+        level: "",
+        duelRank: nextDuel++,
+        contribRank: c.contribRank,
+        source: "contrib-only",
+        needsCheck: true,
+        screenType: "contrib"
+      });
+    }
+    const hasAnyContrib = contribMap.size > 0;
+    if (!hasAnyContrib) {
+      for (const p of players) p.contribRank = OCR_UNKNOWN_CONTRIB;
+    }
+    return { players, unknowns, hasAnyContrib, duelCount: duelList.length, contribCount: contribMap.size };
+  }
+
+
+  function renderOcrDraft(players) {
+    const ui = ensureOcrUiRefs();
+    ocrDraftPlayers = players;
+    if (!ui.tbody) return;
+    ui.tbody.innerHTML = players.map((p, idx) => {
+      const flag = p.needsCheck ? "ocr-flag-check" : "";
+      return `<tr class="${flag}" data-idx="${idx}">
+        <td><input type="text" data-f="nick" value="${escapeHtml(p.nick)}"></td>
+        <td><input type="number" data-f="level" value="${p.level === "" || p.level == null ? "" : p.level}" min="0" step="1"></td>
+        <td><input type="number" data-f="duelRank" value="${p.duelRank}" min="1" step="1"></td>
+        <td><input type="number" data-f="contribRank" value="${p.contribRank}" min="1" step="1"></td>
+        <td>${escapeHtml(p.source || "")}</td>
+        <td>
+          <select class="ocr-type-select" data-f="screenType">
+            <option value="duel"${p.screenType === "duel" ? " selected" : ""}>${escapeHtml(t("ocrTypeDuel"))}</option>
+            <option value="contrib"${p.screenType === "contrib" ? " selected" : ""}>${escapeHtml(t("ocrTypeContrib"))}</option>
+          </select>
+        </td>
+        <td><input type="checkbox" data-f="needsCheck"${p.needsCheck ? " checked" : ""}></td>
+      </tr>`;
+    }).join("");
+    if (ui.draftWrap) ui.draftWrap.hidden = players.length === 0;
+    if (ui.btnApply) ui.btnApply.hidden = players.length === 0;
+    if (ui.btnCancel) ui.btnCancel.hidden = false;
+  }
+
+  function readOcrDraftFromDom() {
+    const ui = ensureOcrUiRefs();
+    const rows = [];
+    ui.tbody?.querySelectorAll("tr").forEach((tr) => {
+      const nick = tr.querySelector('[data-f="nick"]')?.value?.trim() || "";
+      const level = tr.querySelector('[data-f="level"]')?.value ?? "";
+      const duelRank = parseInt(tr.querySelector('[data-f="duelRank"]')?.value || "0", 10);
+      const contribRank = parseInt(tr.querySelector('[data-f="contribRank"]')?.value || "0", 10);
+      if (!nick || duelRank <= 0) return;
+      rows.push([nick, level, String(duelRank), String(contribRank || OCR_UNKNOWN_CONTRIB)]);
+    });
+    return rows;
+  }
+
+  function applyOcrDraftToList() {
+    const dataRows = readOcrDraftFromDom();
+    if (dataRows.length < 1) {
+      setStatus(t("ocrErrEmpty"), "warn");
+      return;
+    }
+    const header = ["Ник", "Уровень", "Ранг (Дуэль)", "Ранг (Взносы)"];
+    try {
+      const loaded = loadFromRows(dataRows, header);
+      lastFile = { name: t("ocrAppliedName") };
+      setFileNameLabel(lastFile.name);
+      renderTable(loaded);
+      showOcrPanel(false);
+      resetOcrDraftUi();
+      setStatus(`${t("ocrApplied")} ${loaded.players.length}`, "success");
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : String(err), "error");
+    }
+  }
+
+  async function runOcrOnFiles(files) {
+    const list = [...files].filter((f) => /^image\//.test(f.type) || /\.(png|jpe?g|webp|gif)$/i.test(f.name));
+    if (!list.length) {
+      setStatus(t("ocrErrNoImages"), "warn");
+      return;
+    }
+    const ui = ensureOcrUiRefs();
+    ocrAbort = false;
+    showOcrPanel(true);
+    resetOcrDraftUi();
+    if (ui.btnStop) ui.btnStop.hidden = false;
+    if (ui.btnScan) ui.btnScan.disabled = true;
+    setStatus(t("ocrRunning"), "loading");
+    ocrLog(t("ocrStart").replace("{n}", String(list.length)));
+
+    const fileResults = [];
+    try {
+      const worker = await getOcrWorker();
+      for (let i = 0; i < list.length; i++) {
+        if (ocrAbort) {
+          ocrLog(t("ocrStopped"));
+          break;
+        }
+        const file = list[i];
+        setOcrProgress(i, list.length, `${i + 1}/${list.length}: ${file.name}`);
+        ocrLog(`${t("ocrFile")} ${file.name}…`);
+        try {
+          let source = file;
+          try {
+            source = await preprocessOcrImage(file);
+          } catch (prepErr) {
+            ocrLog(`${file.name}: preprocess fallback (${prepErr})`);
+            source = file;
+          }
+          const result = await worker.recognize(source);
+          const text = result?.data?.text || "";
+          let type = detectScreenType(text);
+          let rows = type === "unknown" ? [] : parseRankLines(text, type);
+          if (rows.length === 0) {
+            const alt = type === "contrib" ? "duel" : "contrib";
+            const altRows = parseRankLines(text, alt);
+            if (altRows.length > rows.length) {
+              type = alt;
+              rows = altRows;
+              ocrLog(`${file.name}: ${alt} ×${altRows.length} (${t("ocrRetyped")})`);
+            }
+          }
+          // Heuristic by scores if still weak
+          if (rows.length) {
+            const big = rows.filter((r) => r.scoreNum >= 1000000).length;
+            const small = rows.filter((r) => r.scoreNum > 0 && r.scoreNum < 100000).length;
+            if (type === "duel" && small > big && small >= 3) type = "contrib";
+            if (type === "contrib" && big > small && big >= 3) type = "duel";
+            rows = parseRankLines(text, type);
+          }
+          fileResults.push({ name: file.name, text, type, rows });
+          ocrLog(`${file.name}: ${type} ×${rows.length}`);
+          // debug first lines for user
+          const preview = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean).slice(0, 6).join(" | ");
+          if (preview) ocrLog(`  ≈ ${preview.slice(0, 160)}`);
+        } catch (err) {
+          ocrLog(`${file.name}: ${err instanceof Error ? err.message : String(err)}`);
+        }
+      }
+      setOcrProgress(list.length, list.length, `${list.length}/${list.length}`);
+      const merged = mergeOcrResults(fileResults);
+      if (merged.unknowns.length) {
+        ocrLog(t("ocrUnknownTypes") + ": " + merged.unknowns.join(", "));
+      }
+      ocrLog(t("ocrMergeSummary")
+        .replace("{duel}", String(merged.duelCount))
+        .replace("{contrib}", String(merged.contribCount))
+        .replace("{total}", String(merged.players.length)));
+      renderOcrDraft(merged.players);
+      if (ui.btnStop) ui.btnStop.hidden = true;
+      if (merged.players.length) {
+        setStatus(t("ocrDraftReady").replace("{n}", String(merged.players.length)), "warn");
+      } else {
+        setStatus(t("ocrErrEmpty"), "warn");
+      }
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : String(err), "error");
+      ocrLog(String(err));
+    } finally {
+      if (ui.btnScan) ui.btnScan.disabled = false;
+      if (ui.btnStop) ui.btnStop.hidden = true;
+      if (ui.fileInput) ui.fileInput.value = "";
+    }
+  }
+
+  function applyOcrI18n() {
+    const ui = ensureOcrUiRefs();
+    const label = ui.btnScan?.querySelector(".btn-ocr-label");
+    if (label) label.textContent = t("ocrBtn");
+    if (ui.title) ui.title.textContent = t("ocrPanelTitle");
+    if (ui.hint) ui.hint.textContent = t("ocrHint");
+    if (ui.btnStop) ui.btnStop.textContent = t("ocrStop");
+    if (ui.btnApply) ui.btnApply.textContent = t("ocrApply");
+    if (ui.btnCancel) ui.btnCancel.textContent = t("ocrCancel");
+    document.querySelectorAll("[data-ocr-th]").forEach((th) => {
+      const key = th.getAttribute("data-ocr-th");
+      const map = {
+        nick: "ocrThNick",
+        level: "ocrThLevel",
+        duel: "ocrThDuel",
+        contrib: "ocrThContrib",
+        src: "ocrThSrc",
+        type: "ocrThType",
+        check: "ocrThCheck"
+      };
+      if (map[key]) th.textContent = t(map[key]);
+    });
+  }
+
+  function setupOcrUi() {
+    const ui = ensureOcrUiRefs();
+    if (!ui.btnScan || !ui.fileInput) return;
+    ui.btnScan.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      ui.fileInput.click();
+    });
+    ui.fileInput.addEventListener("change", () => {
+      const files = ui.fileInput.files;
+      if (files?.length) runOcrOnFiles(files);
+    });
+    ui.btnStop?.addEventListener("click", () => {
+      ocrAbort = true;
+      ocrLog(t("ocrStopping"));
+    });
+    ui.btnApply?.addEventListener("click", () => applyOcrDraftToList());
+    ui.btnCancel?.addEventListener("click", () => {
+      showOcrPanel(false);
+      resetOcrDraftUi();
+      setStatus(t("ocrCancelled"), "info");
+    });
+  }
+
   var SAMPLE_CSV_URL = "\u043F\u0440\u0438\u043C\u0435\u0440_\u0441\u043F\u0438\u0441\u043E\u043A_\u0438\u0433\u0440\u043E\u043A\u043E\u0432.csv";
   var SAMPLE_FILE_NAME = "\u043F\u0440\u0438\u043C\u0435\u0440_\u0441\u043F\u0438\u0441\u043E\u043A_\u0438\u0433\u0440\u043E\u043A\u043E\u0432.csv";
   async function resolveSampleCsvText() {
@@ -7074,6 +7963,8 @@ footer {
       e.stopPropagation();
       loadSampleData();
     });
+    setupOcrUi();
+    applyOcrI18n();
     document.getElementById("workflow-toast-close")?.addEventListener("click", hideWorkflowToast);
     document.getElementById("workflow-toast-goto")?.addEventListener("click", () => {
       hideWorkflowToast();
